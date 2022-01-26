@@ -11,12 +11,14 @@ var formSubmitHandler = function(event) {
     var username = nameInputEl.value.trim();
 
     if (username) {
-    getUserRepos(username);
-    nameInputEl.value = "";
+      getUserRepos(username);
+
+      // clear old content
+      repoContainerEl.textContent = '';
+      nameInputEl.value = '';
     } else {
-    alert("Please enter a GitHub username");
+      alert("Please enter a GitHub username");
     }
-    console.log(event);
   };
 
 var getUserRepos = function(user) {
@@ -28,11 +30,12 @@ var getUserRepos = function(user) {
     .then(function(response) {
       // request was successful
       if (response.ok) {
+        console.log(response);
         response.json().then(function(data) {
           displayRepos(data, user);
         });
       } else {
-        alert('Error: GitHub User Not Found');
+        alert('Error: ' + response.statusText);
       }
     })
     .catch(function(error) {
@@ -49,7 +52,6 @@ var displayRepos = function(repos, searchTerm) {
     }
 
     // clear old content
-    repoContainerEl.textContent = "";
     repoSearchTerm.textContent = searchTerm;
 
     // loop over repos
